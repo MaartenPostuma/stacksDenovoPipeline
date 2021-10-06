@@ -1,6 +1,6 @@
 library(ggplot2)
 library(reshape2)
-data<-read.table("output/parameterTest/SmallMParameter.tsv")
+data<-read.table("output/parameterTest/SmallMparameter.tsv")
 data$M<-3:7
 colnames(data)<-c("nLoci","nVariantLoci","coverage","M")
 
