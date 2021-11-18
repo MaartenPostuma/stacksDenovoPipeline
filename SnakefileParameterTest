@@ -1,12 +1,8 @@
-SMALLM = list(range(3,8))
 LARGEM = list(range(1,9))
 rule all:
     input:
         MparameterPNG=expand("output/parameterTest/LargeMparameter.png"),
-        testLargeM=expand("output/parameterTest/LargeM{largeM}/test{largeM}",largeM=LARGEM),
-        mparameterPNG=expand("output/parameterTest/SmallMparameter.png"),
-        testSmallM=expand("output/parameterTest/SmallM{SmallM}/test{SmallM}",SmallM=SMALLM)
-
+        testLargeM=expand("output/parameterTest/LargeM{largeM}/test{largeM}",largeM=LARGEM)
 
 rule subset_popmap:
     input:
@@ -42,7 +38,7 @@ rule runStacksLargeM:
     shell:
         """
         denovo_map.pl --samples output/demultiplex/ --popmap {params.popmapSub} -T {threads} \
-        -o {params.inDir} -n {params.largeM} -m 3 -M {params.largeM}  \
+        -o {params.inDir} -n {params.largeM} -M {params.largeM}  \
         -X 'populations: --vcf -r 80'
         """
 
@@ -63,53 +59,3 @@ rule makePlotLargeM:
         MparameterPNG="output/parameterTest/LargeMparameter.png"
     shell:
         "Rscript src/LargeMparameterTest.R"
-
-#Small M paramter Test
-
-rule mkdirSmallM:
-    input:
-        "data/popmapSub.tsv"
-    output:
-        expand("output/parameterTest/SmallM{{SmallM}}/test{{SmallM}}")
-    params:
-        SmallM="{SmallM}"
-    shell:
-        "cat {input} | head -n {params.SmallM} > {output}"
-
-rule runStacksSmallM:
-    input:
-        inDir=expand("output/parameterTest/SmallM{{SmallM}}/test{{SmallM}}")
-    output:
-        outLog=expand("output/parameterTest/SmallM{{SmallM}}/denovo_map.log")
-    params:
-        SmallM="{SmallM}",
-        popmapSub="data/popmapSub.tsv",
-        inDir="output/parameterTest/SmallM{SmallM}/"
-
-    conda:
-        "src/env/stacks.yaml"
-    threads: 4
-    shell:
-        """
-        denovo_map.pl --samples output/demultiplex/ --popmap {params.popmapSub} -T {threads} \
-        -o {params.inDir} -n 0 -m {params.SmallM} -M 2  \
-        -X 'populations: --vcf -r 80'
-        """
-
-rule extractInfoSmallM:
-    input:
-        outLog=expand("output/parameterTest/SmallM{SmallM}/denovo_map.log",SmallM=SMALLM)
-    output:
-        MparameterTSV="output/parameterTest/SmallMparameter.tsv"
-    shell:
-        """
-        paste <(cat output/parameterTest/SmallM*/denovo_map.log | grep "Kept" | cut -f2,14 -d " ")  <(cat output/parameterTest/SmallM*/denovo_map.log | grep "per-sample coverage" | cut -f2 -d "=" | cut -f1 -d "x") > output/parameterTest/SmallMparameter.tsv
-        """
-
-rule makePlotSmallM:
-    input:
-        MparameterTSV="output/parameterTest/SmallMparameter.tsv"
-    output:
-        MparameterPNG="output/parameterTest/SmallMparameter.png"
-    shell:
-        "Rscript src/SmallMparameterTest.R"
