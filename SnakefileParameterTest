@@ -42,7 +42,7 @@ rule runStacksLargeM:
     shell:
         """
         denovo_map.pl --samples output/demultiplex/ --popmap {params.popmapSub} -T {threads} \
-        -o {params.inDir} -n 0 -m 3 -M {params.largeM}  \
+        -o {params.inDir} -n {params.largeM} -m 3 -M {params.largeM}  \
         -X 'populations: --vcf -r 80'
         """
 
