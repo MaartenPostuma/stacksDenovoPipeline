@@ -10,8 +10,10 @@ rule subset_popmap:
         config["popmap"]
     output:
         expand("{dir}/popmapSub.tsv",dir=config["outdir"])
+    params:
+        config["nInds"]
     shell:
-        "shuf -n 20 {input} > {output}"
+        "shuf -n {params} {input} > {output}"
 
 rule mkdirLargeM:
     input:
@@ -40,7 +42,7 @@ rule runStacksLargeM:
         """
         denovo_map.pl --samples {params.indir} --popmap {params.popmapSub} -T {threads} \
         -o {params.outDir} -n {params.largeM} -M {params.largeM}  \
-        -X 'populations: -r 80'
+        -X 'populations: -R 80'
         """
 
 rule extractInfoLargeM:

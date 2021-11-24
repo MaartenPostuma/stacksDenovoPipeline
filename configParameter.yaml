@@ -1,3 +1,4 @@
-outdir : "output/paramTest4"
-indir  : "breedWollegras/samples/"
-popmap : "data/popmapBreed.tsv"
+outdir : "output2"
+indir  : "../samples/"
+popmap : "../Geum_Rivale/data/popmapNoGeelFinal.tsv"
+nInds  : 40
