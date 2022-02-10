@@ -10,7 +10,7 @@ ggplot(meltedData,aes(y=value,x=M,col=variable))+geom_line()+facet_wrap(.~variab
   ggsave(paste0(args[1],"/LargeMparameter.png"))
 
 data<-data[order(data$M),]
-diffData<-data.frame(diffVarLoci=diff(data$nLoci),diffLoci=diff(data$nVariantLoci),diffCov=diff(data$coverage),M=2:nrow(data))
+diffData<-data.frame(diffVarLoci=diff(data$nLoci),diffLoci=diff(data$nVariantLoci),diffCov=diff(data$coverage),M=data$M[-1])
 meltDiff<-melt(diffData,id.vars="M")
 ggplot(meltDiff,aes(y=value,x=M,col=variable,group=variable))+geom_line()+facet_wrap(.~variable,scales="free_y")
   ggsave(paste0(args[1],"/LargeMparameterDiff.png"))
