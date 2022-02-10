@@ -54,7 +54,7 @@ rule extractInfoLargeM:
         dir=config["outdir"]
     shell:
         """
-        paste <(cat {params.dir}/LargeM*/denovo_map.log | grep "Kept" | cut -f2,14 -d " ") \ 
+        paste <(cat {params.dir}/LargeM*/denovo_map.log | grep "Kept" | cut -f2,14 -d " ") \
         <(cat {params.dir}/LargeM*/denovo_map.log | grep "per-sample coverage" | cut -f2 -d "=" | cut -f1 -d "x") \
         <(cat {params.dir}/LargeM*/denovo_map.log | grep "\-M" | grep "denovo_map.pl" | cut -f 14 -d " ") >\
         {params.dir}/LargeMparameter.tsv
