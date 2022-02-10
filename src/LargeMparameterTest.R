@@ -3,7 +3,6 @@ library(reshape2)
 args = commandArgs(trailingOnly=TRUE)
 
 data<-read.table(paste0(args[1],"/LargeMparameter.tsv"))
-data$M<-c(1,10,11,2:9)
 colnames(data)<-c("nVariantLoci","nLoci","coverage","M")
 
 meltedData<-melt(data,id.vars="M")
