@@ -13,7 +13,7 @@ rule subset_popmap:
     params:
         config["nInds"]
     shell:
-        "paste <(shuf -n 10 {input} | cut -f1) <(yes opt | head -n {params}) > {output}"
+        "paste <(shuf -n {params} {input} | cut -f1) <(yes opt | head -n {params}) > {output}"
 
 rule mkdirLargeM:
     input:
